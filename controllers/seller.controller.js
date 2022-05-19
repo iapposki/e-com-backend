@@ -48,9 +48,29 @@ const deleteSellerById = async (req, res) => {
     }
 }
 
+const updateSellerById = async (req, res) => {
+    try {
+        const {id, newId, name, email, gstNumber, phoneNumber} = req.body;
+        await prisma.seller.update({
+            where: {
+                id : id,
+            },
+            data : {
+                name, email, gstNumber, phoneNumber
+            }
+        });
+        res.status(200).json({msg : 'Successfully updated seller with id ' + id});
+    } catch (err) {
+        // console.log(err)
+        res.status(400).json({msg : 'Error while updating seller'});
+    }
+
+}
+
 
 module.exports = {
     createSeller,
     getSellers,
     deleteSellerById,
+    updateSellerById
 };
