@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
-const {createProduct, getProducts} = require('./controllers/product.controller');
+const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
 const {createOTP} = require('./controllers/otp.controller');
 const { json } = require('express/lib/response');
 // const res = require('express/lib/response');
@@ -27,7 +27,8 @@ app.put('/seller', updateSellerById);
 
 app.post('/seller/:sellerId/product', createProduct);
 app.get('/products', getProducts);
-
+app.delete('/product', deleteProductById);
+ 
 app.post('/otp', createOTP)
 
 app.listen(port, () =>{

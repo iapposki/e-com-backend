@@ -29,8 +29,30 @@ const createProduct = async (req, res) => {
 }
 
 const getProducts = async (req, res) => {
+    const {limit = 10, offset = 0, sortBy = 'createdAt', sortOrder = 'asc', search} = req.query;
+    console.log(`limit: ${limit} offset: ${offset}`);
     try {
-        const response = await prisma.product.findMany({})
+        const response = await prisma.product.findMany({
+            where : {
+                OR: [
+                    {
+                        description : {
+                            search : search
+                        }
+                    },{
+                        name : {
+                            search : search
+                        }
+                    }
+                ]
+                
+            },
+            skip : parseInt(offset),
+            take : parseInt(limit),
+            orderBy : {
+                [sortBy] : sortOrder
+            },
+        })
         res.status(200).json({msg : 'Success', data : response});
     } catch (err) {
         // console.log(err)
