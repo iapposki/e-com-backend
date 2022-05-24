@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
+const {signUp, login} = require('./controllers/user.controller');
 const {createOTP} = require('./controllers/otp.controller');
 const { json } = require('express/lib/response');
 // const res = require('express/lib/response');
@@ -30,6 +31,9 @@ app.get('/products', getProducts);
 app.delete('/product', deleteProductById);
  
 app.post('/otp', createOTP)
+
+app.post('/auth/signup', signUp)
+app.post('/auth/login', login)
 
 app.listen(port, () =>{
     console.log(`Server is running on port ${port}`);

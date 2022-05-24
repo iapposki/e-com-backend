@@ -3,10 +3,6 @@ const prisma = new PrismaClient();
 
 const createSeller = async (req, res) => {
     console.log("Initializing Seller cration...")
-    // console.log(res);
-    // for (var i in res){
-    //     console.log(i)
-    // }
     try {
         const {name, email, gstNumber, phoneNumber} = req.body;
         await prisma.seller.create({
@@ -16,6 +12,7 @@ const createSeller = async (req, res) => {
         });
         // res.send("Seller created successfully");
         res.status(200).json({msg:'Seller added successfully'});
+        console.log("Seller created successfully");
     } catch (err) {
         // console.log(err); 
         res.status(400).json({msg:'Error while adding Seller'});

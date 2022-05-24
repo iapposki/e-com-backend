@@ -76,35 +76,8 @@ const deleteProductById = async (req, res) => {
     }
 }
 
-const updateProductById = async (req, res) => {
-    try {
-        const {id, newId, name, email, gstNumber, phoneNumber} = req.body;
-        await prisma.product.update({
-            where: {
-                id : id,
-            },
-            data : {
-                name, email, gstNumber, phoneNumber
-            }
-        });
-        res.status(200).json({msg : 'Successfully updated Product with id ' + id});
-    } catch (err) {
-        // console.log(err)
-        res.status(400).json({msg : 'Error while updating Product'});
-    }
-
-}
-
-// const patchProductById = async (req, res) => {
-//     try {
-//         const {id, name, email, gstNumber, phoneNumber} = req.body;
-
-//     }
-// }
-
 module.exports = {
     createProduct,
     getProducts,
     deleteProductById,
-    updateProductById
 };
