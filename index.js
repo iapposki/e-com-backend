@@ -6,8 +6,7 @@ const {createProduct, getProducts, deleteProductById} = require('./controllers/p
 const {signUp, login} = require('./controllers/user.controller');
 const {createOTP} = require('./controllers/otp.controller');
 const { json } = require('express/lib/response');
-// const res = require('express/lib/response');
-// const request = require('express/lib/request');
+const {authenticate} = require('./middlewares/auth');
 const app = express();
 const port = 3000;
 
@@ -21,7 +20,7 @@ app.get('/status', (req, res) => {
     res.send("Node server is running")
 })
 
-app.post('/seller', createSeller);
+app.post('/seller', authenticate, createSeller);
 app.delete('/seller', deleteSellerById)
 app.get('/seller', getSellers);
 app.put('/seller', updateSellerById);

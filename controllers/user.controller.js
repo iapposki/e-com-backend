@@ -1,4 +1,26 @@
-const {createUser} = require('../services/user.service')
+const {createUser, validateUsernamePassword} = require('../services/user.service')
+
+
+
+const login = async (req, res) => {
+    const {email, password} = req.body;
+    // console.log("Initializing user login");
+    if (!(email && password)) {
+        res.status(400).json({msg: 'Email or password missing'});
+    } else {
+        try {
+            const response = await validateUsernamePassword(email, password);
+            if (response && response.pass) {
+                res.status(200).json({msg: 'Login successful', token: response.token});
+            } else {
+                res.status(401).json({msg: 'Invalid credentials'});
+            }
+        } catch (error) {
+            console.log(error.stack);
+            res.status(500).json({msg: 'Something Failed'});
+        }
+    }
+}
 
 const signUp = async (req, res) => {
     
@@ -20,13 +42,13 @@ const signUp = async (req, res) => {
     }
     if (condition) {
         try {
-            await createUser({name, email, password, phoneNumber, dob});
+            const token = await createUser({name, email, password, phoneNumber, dob});
             // await prisma.user.create({
             //     data: {
             //         name, email, password, phoneNumber, dob 
             //     }
             // })
-            res.status(201).json({msg: 'User created successfully'});
+            res.status(201).json({msg: 'User created successfully', token: token});
         } catch (error) {
             console.log(error.stack);
             res.status(500).json({msg: 'Something Failed'});
@@ -34,9 +56,6 @@ const signUp = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
-
-}
 
 module.exports = {
     login,
