@@ -1,5 +1,5 @@
 const {createUser, validateUsernamePassword} = require('../services/user.service')
-
+const {logger} = require('../log/index');
 
 
 const login = async (req, res) => {
@@ -14,9 +14,11 @@ const login = async (req, res) => {
                 res.status(200).json({msg: 'Login successful', token: response.token});
             } else {
                 res.status(401).json({msg: 'Invalid credentials'});
+                console.info("Invalid credentialsssssssssss");
             }
         } catch (error) {
-            console.log(error.stack);
+            logger.error(error.stack);
+            // console.log(error.stack);
             res.status(500).json({msg: 'Something Failed'});
         }
     }
