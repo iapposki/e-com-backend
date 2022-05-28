@@ -1,9 +1,10 @@
 const {createUser, validateUsernamePassword} = require('../services/user.service')
-const {logger} = require('../log/index');
+const logger = require('../log/index')
 
 
 const login = async (req, res) => {
     const {email, password} = req.body;
+    logger.info(req.body)
     // console.log("Initializing user login");
     if (!(email && password)) {
         res.status(400).json({msg: 'Email or password missing'});
@@ -14,7 +15,7 @@ const login = async (req, res) => {
                 res.status(200).json({msg: 'Login successful', token: response.token});
             } else {
                 res.status(401).json({msg: 'Invalid credentials'});
-                console.info("Invalid credentialsssssssssss");
+                logger.info("Invalid credentialsssssssssss");
             }
         } catch (error) {
             logger.error(error.stack);

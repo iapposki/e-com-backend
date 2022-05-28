@@ -1,17 +1,22 @@
-const {createLogger, transports, format} = require('winston');
+// const {createLogger, transports, format} = require('winston');
+const winston = require('winston')
 
 const logLevels = {
-    fatal : 0,
-    error : 1,
-    warn  : 2,
-    info  : 3,
-    debug : 4,
-}
-
-const logger = createLogger({
+    error: 0,
+    warn: 1,
+    info: 2,
+    http: 3,
+    verbose: 4,
+    debug: 5,
+    silly: 6
+  };
+const logger = winston.createLogger({
     levels : logLevels,
-    transports : [new transports.Console()],
-    format : format.combine(format.timestamp(), format.json(), format.prettyPrint()),
+    transports : [new winston.transports.Console()],
+    format : winston.format.combine(winston.format.timestamp(), winston.format.json(), winston.format.prettyPrint()),
 })
+
+
+
 
 module.exports = logger;
