@@ -1,14 +1,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer')
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
 const {signUp, login} = require('./controllers/user.controller');
 const {createOTP} = require('./controllers/otp.controller');
-const { json } = require('express/lib/response');
 const {authenticate} = require('./middlewares/auth');
 const app = express();
 const port = 3000;
+
+// --------------------------------------------------------
+
+// multer
+
+// const uploads = multer({dest: 'public/productImages/'});
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/productImages/')
+    },
+    filename: function(req, file, cb){
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1000000000);
+        cb(null, file.originalname + '-' + uniqueSuffix);
+    }
+})
+const uploads = multer({storage: storage})
+
+// --------------------------------------------------------
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,12 +39,18 @@ app.get('/status', (req, res) => {
     res.send("Node server is running")
 })
 
+// -------------------------------------------------------
+
 app.post('/seller', authenticate, createSeller);
 app.delete('/seller', deleteSellerById)
 app.get('/seller', getSellers);
 app.put('/seller', updateSellerById);
 
-app.post('/seller/:sellerId/product', createProduct);
+// for uploading single file
+// app.post('/seller/:sellerId/product', uploads.single('productImage'), createProduct);
+// for uploading multiple files with max number of images provided
+app.post('/seller/:sellerId/product', uploads.array('productImages', 6), createProduct);
+
 app.get('/products', getProducts);
 app.delete('/product', deleteProductById);
  
@@ -33,6 +58,8 @@ app.post('/otp', createOTP)
 
 app.post('/auth/signup', signUp)
 app.post('/auth/login', login)
+
+// -----------------------------------------------------
 
 app.listen(port, () =>{
     console.log(`Server is running on port ${port}`);

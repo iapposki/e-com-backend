@@ -6,6 +6,7 @@ const config = {
         myNumber : process.env["TWILIO_MY_NUMBER"],
     },
     authSecret : process.env["AUTH_SECRET"] || "secret",
+    serverAddress : process.env["SERVER_ADDRESS"] || "http://localhost:3000/",
 }
 
 module.exports = config;

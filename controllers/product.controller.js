@@ -1,22 +1,28 @@
 const {PrismaClient} = require('@prisma/client');
+const { json } = require('express/lib/response');
 const prisma = new PrismaClient();
+const {serverAddress} = require('../config/index');
 
 const createProduct = async (req, res) => {
     console.log("Initializing Product cration...")
     const {sellerId} = req.params;
+    imageFileDestinations = [];
+    for (file of req.files) {
+        imageFileDestinations.push(serverAddress + file.destination.split('/').slice(1).join("/") + file.filename);
+    }
+    console.log(req.files);
     try {
-        const { name, price, description, image = [], 
+        var { name, price, description, image = [], 
             discountedPrice, isDiscounted, category, inStock
             } = req.body;
-        
         await prisma.seller.update({
             where: {
             id: parseInt(sellerId)
             }, data: {
             productsList: {create: [
             {
-                name, price, description, image,
-                discountedPrice, isDiscounted, category, inStock,
+                name, price: parseInt(price), description, image: imageFileDestinations,
+                discountedPrice: parseInt(discountedPrice), isDiscounted: isDiscounted === 'true', category, inStock: inStock === 'true',
             }
             ]
         }}}
@@ -29,31 +35,36 @@ const createProduct = async (req, res) => {
 }
 
 const getProducts = async (req, res) => {
-    const {limit = 10, offset = 0, sortBy = 'createdAt', sortOrder = 'asc', search} = req.query;
+    const {limit = 10, offset = 0, sortBy = 'createdAt', sortOrder = 'asc', search=""} = req.query;
     console.log(`limit: ${limit} offset: ${offset}`);
     try {
-        const response = await prisma.product.findMany({
-            where : {
-                OR: [
-                    {
-                        description : {
-                            search : search
+        if (!search) {
+            const response = await prisma.product.findMany({});
+            res.status(200).json({msg : 'Success', data : response});
+        } else {
+            const response = await prisma.product.findMany({
+                where : {
+                    OR: [
+                        {
+                            description : {
+                                search : search
+                            }
+                        },{
+                            name : {
+                                search : search
+                            }
                         }
-                    },{
-                        name : {
-                            search : search
-                        }
-                    }
-                ]
-                
-            },
-            skip : parseInt(offset),
-            take : parseInt(limit),
-            orderBy : {
-                [sortBy] : sortOrder
-            },
-        })
-        res.status(200).json({msg : 'Success', data : response});
+                    ]
+                    
+                },
+                skip : parseInt(offset),
+                take : parseInt(limit),
+                orderBy : {
+                    [sortBy] : sortOrder
+                },
+            })
+            res.status(200).json({msg : 'Success', data : response});
+        }
     } catch (err) {
         // console.log(err)
         res.status(400).json({msg : 'Error while fetching Products'});
@@ -63,13 +74,15 @@ const getProducts = async (req, res) => {
 const deleteProductById = async (req, res) => {
     try {
         const {id} = req.body;
-        await prisma.product.delete({
-            where: {
-                id : id
-            }
-        });
-        // console.log(id);
-        res.status(200).json({msg : 'Successfully deleted Product with id ' + id});
+        for (singularID of id) {
+            await prisma.product.delete({
+                where: {
+                    id : singularID
+                }
+            });
+            // console.log(id);
+        }
+        res.status(200).json({msg : 'Successfully deleted Product with id(s) ' + id});
     } catch (err) {
         // console.log(err)
         res.status(400).json({msg : 'Error while deleting Product'});
