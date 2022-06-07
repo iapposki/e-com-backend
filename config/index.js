@@ -7,6 +7,7 @@ const config = {
     },
     authSecret : process.env["AUTH_SECRET"] || "secret",
     serverAddress : process.env["SERVER_ADDRESS"] || "http://localhost:3000/",
+    redisServerAddress : process.env["REDIS_SERVER"] || "redis://localhost:6379",
 }
 
 module.exports = config;

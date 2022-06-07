@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -5,11 +6,12 @@ const multer = require('multer')
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
 const {signUp, login} = require('./controllers/user.controller');
-const {createOTP} = require('./controllers/otp.controller');
+const {createOTP, validateOtp} = require('./controllers/otp.controller');
 const {createOrder} = require('./controllers/order.controller');
 const {authenticate} = require('./middlewares/auth');
 const app = express();
 const port = 3000;
+
 
 // --------------------------------------------------------
 
@@ -56,6 +58,7 @@ app.get('/products', getProducts);
 app.delete('/product', deleteProductById);
  
 app.post('/otp', createOTP)
+app.post('/validateotp', validateOtp)
 
 app.post('/auth/signup', signUp)
 app.post('/auth/login', login)

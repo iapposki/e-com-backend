@@ -1,4 +1,4 @@
-const {twilio} = require('../config');
+const {twilio} = require('../config/index');
 const client = require('twilio')(twilio.apiSID, twilio.apiAuthToken);
 
 const sendSMS = async (body, to) => {
