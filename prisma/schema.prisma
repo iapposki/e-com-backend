@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
@@ -12,48 +12,61 @@ datasource db {
 }
 
 model Product {
-    id          Int @id @default(autoincrement())
-    name        String @db.VarChar(255)
-    description String
-    image       String[]
-    price       Int             //(*100 -> 100.78 -> 10078)
-    discountedPrice Int?
-    isDiscounted Boolean @default(false)
-    category  String
-    inStock    Boolean @default(true)
-    seller      Seller @relation(fields: [sellerId], references: [id])
-    sellerId   Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  name            String   @db.VarChar(255)
+  description     String
+  image           String[]
+  price           Int //(*100 -> 100.78 -> 10078)
+  discountedPrice Int?
+  isDiscounted    Boolean  @default(false)
+  category        String
+  inStock         Boolean  @default(true)
+  seller          Seller   @relation(fields: [sellerId], references: [id])
+  sellerId        Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  Order           Order?   @relation(fields: [orderId], references: [id])
+  orderId         Int?
 }
 
 model Seller {
-    id          Int @id @default(autoincrement())
-    name        String @db.VarChar(30)
-    email       String @unique
-    gstNumber  String?
-    phoneNumber String @db.VarChar(10)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    productsList Product[]
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(30)
+  email        String    @unique
+  gstNumber    String?
+  phoneNumber  String    @db.VarChar(10)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  productsList Product[]
 }
 
 // enum used for roles.(refer prisma data model reference.)
 enum Role {
-    ADMIN
-    USER
-    SELLER 
+  ADMIN
+  USER
+  SELLER
 }
 
 model User {
-    id          Int         @id @default(autoincrement())
-    name        String      @db.VarChar(30)
-    email       String      @unique
-    phoneNumber String      @db.VarChar(10)
-    password    String
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    dob         DateTime?
-    role        Role        @default(USER)
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(30)
+  email       String    @unique
+  phoneNumber String    @db.VarChar(10)
+  password    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  dob         DateTime?
+  role        Role      @default(USER)
+  Order       Order[]
+}
 
+model Order {
+  id         Int       @id @default(autoincrement())
+  productIds Int[]
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  total      Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  product    Product[]
 }

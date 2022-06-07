@@ -6,6 +6,7 @@ const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
 const {signUp, login} = require('./controllers/user.controller');
 const {createOTP} = require('./controllers/otp.controller');
+const {createOrder} = require('./controllers/order.controller');
 const {authenticate} = require('./middlewares/auth');
 const app = express();
 const port = 3000;
@@ -58,6 +59,8 @@ app.post('/otp', createOTP)
 
 app.post('/auth/signup', signUp)
 app.post('/auth/login', login)
+
+app.post('/order', createOrder)
 
 // -----------------------------------------------------
 
