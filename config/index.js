@@ -1,3 +1,7 @@
+const process = require('process');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const config = {
     postgresURL : process.env["DATABASE_URL"] || "postgres://postgres:password@localhost:5432/mydb",
     twilio : {
@@ -8,6 +12,10 @@ const config = {
     authSecret : process.env["AUTH_SECRET"] || "secret",
     serverAddress : process.env["SERVER_ADDRESS"] || "http://localhost:3000/",
     redisServerAddress : process.env["REDIS_SERVER"] || "redis://localhost:6379",
+    razorpayKeys : {
+        keyId : process.env["RAZORPAY_KEY_ID"] || "key id not found",
+        keySecret : process.env["RAZORPAY_KEY_SECRET"] || "key secret not found",
+    },
 }
 
 module.exports = config;

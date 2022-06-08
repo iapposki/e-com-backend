@@ -4,8 +4,8 @@ const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 const {authSecret} = require('../config');
 
-const generateToken = async (name, email, role) => {
-    const token = jwt.sign({name, email, role}, authSecret, {expiresIn: '24h'});
+const generateToken = async (name, email, role, expiry='24h') => {
+    const token = jwt.sign({name, email, role}, authSecret, {expiresIn: expiry});
     return token
 }
 
@@ -24,7 +24,23 @@ const validateUsernamePassword = async (email, password) => {
     return false
 }
 
+const getUserByEmail = async (email) => {
+    const record = await prisma.user.findFirst({where: {email : email,}})
+    return record;
+};
+
+const updatePassword = async (email, password) => {
+    await prisma.user.update({
+        where: {email: email},
+        data: {password: md5(password)}
+    })
+}
+
+
 module.exports = {
     createUser,
-    validateUsernamePassword
+    validateUsernamePassword,
+    getUserByEmail,
+    generateToken,
+    updatePassword
 }

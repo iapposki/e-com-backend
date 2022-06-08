@@ -1,5 +1,6 @@
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
+const rzp = require('../services/razorpay.service');
 
 const createOrder = async (req, res) => {
     const {productIds, userId} = req.body;
@@ -19,13 +20,27 @@ const createOrder = async (req, res) => {
     }
     
     console.log(total)
-    await prisma.order.create({
+    const order = await prisma.order.create({
         data: {
             total: total, productIds, userId: parseInt(userId),   
         }
     })
-    // console.log(order);
-    res.status(200).json({msg: 'Order created'});
+    console.log(order);
+
+    let rzpOrder;
+    try {
+        rzpOrder = await rzp.orders.create({
+            amount: total, // amount in the smallest currency unit, or whatever chosen
+            currency: 'INR',
+            receipt: order.id,
+        }) 
+    }catch (err) {
+        console.log(err);
+    }
+    
+    console.log(rzpOrder, 'rzp');
+    const {id : rzpId, amount, receipt} = rzpOrder;
+    res.status(200).json({status : 'success', rzpId, amount, receipt, msg : 'Order created successfully'});
     
 }
 

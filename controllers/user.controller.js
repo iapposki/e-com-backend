@@ -1,4 +1,4 @@
-const {createUser, validateUsernamePassword} = require('../services/user.service')
+const {createUser, validateUsernamePassword, getUserByEmail, generateToken, updatePassword} = require('../services/user.service')
 const logger = require('../log/index')
 
 
@@ -57,10 +57,48 @@ const signUp = async (req, res) => {
             res.status(500).json({msg: 'Something Failed'});
         }
     }
-}
+};
+
+const forgotPassword = async (req, res) => {
+    const {email} = req.body;
+    
+    try{
+        if (!email){
+            res.status(400).json({msg: 'Email missing'});
+        };
+        const user = await getUserByEmail(email);
+        if (!user){
+            res.status(404).json({msg: 'User not found'});
+        };
+        const token = await generateToken(user.name, user.email,  user.role, expiry='10m');
+        res.status(200).json({msg: 'Token generated', token: token});
+    } catch (error) {
+        console.log(error.stack);
+        res.status(500).json({msg: 'Something Failed'});
+    }
+};
+
+const resetPassword = async (req, res) => {
+    const {password, confirmPassword} = req.body;
+    const {email} = req.userDetails;
+
+    try {
+        if (password !== confirmPassword) {
+            res.status(400).json({msg: 'Passwords do not match'});
+        }
+        await updatePassword(email, password);
+        res.status(200).json({msg: 'Password updated'});
+    } catch (error) {
+        console.log(error.stack);
+        res.status(500).json({msg: 'Something Failed'});
+    }
+};
+
 
 
 module.exports = {
     login,
-    signUp
+    signUp,
+    forgotPassword,
+    resetPassword
 }
