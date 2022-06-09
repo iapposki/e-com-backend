@@ -1,5 +1,6 @@
-const {createUser, validateUsernamePassword, getUserByEmail, generateToken, updatePassword} = require('../services/user.service')
-const logger = require('../log/index')
+const {createUser, validateUsernamePassword, getUserByEmail, generateToken, updatePassword, toggleVerification} = require('../services/user.service')
+const logger = require('../log/index');
+const sendEmail = require('../services/email.service');
 
 
 const login = async (req, res) => {
@@ -51,6 +52,12 @@ const signUp = async (req, res) => {
             //         name, email, password, phoneNumber, dob 
             //     }
             // })
+            await sendEmail({
+                to: email,
+                subject: 'Welcome to the e-commerce app',
+                text: `Hi ${name},\n\nWelcome to the e-commerce app.\n\nPlease click on the following link to verify your account:\n\nhttp://localhost:3000/auth/signup/verify?token=${token}\n\nRegards,\n\nE-commerce team`,
+                html: '<h1>Welcome</h1>'
+            })
             res.status(201).json({msg: 'User created successfully', token: token});
         } catch (error) {
             console.log(error.stack);
@@ -71,6 +78,12 @@ const forgotPassword = async (req, res) => {
             res.status(404).json({msg: 'User not found'});
         };
         const token = await generateToken(user.name, user.email,  user.role, expiry='10m');
+        await sendEmail({
+            to: email,
+            subject: 'Reset Password',
+            text: `Hi ${user.name},\n\nPlease click on the following link to reset your password:\n\nhttp://localhost:3000/auth/resetpassword?token=${token}\n\nRegards,\n\nE-commerce team`,
+            html: '<h1>Reset Password</h1>'
+        })
         res.status(200).json({msg: 'Token generated', token: token});
     } catch (error) {
         console.log(error.stack);
@@ -85,20 +98,32 @@ const resetPassword = async (req, res) => {
     try {
         if (password !== confirmPassword) {
             res.status(400).json({msg: 'Passwords do not match'});
-        }
+        } else {
         await updatePassword(email, password);
         res.status(200).json({msg: 'Password updated'});
+        }
     } catch (error) {
         console.log(error.stack);
         res.status(500).json({msg: 'Something Failed'});
     }
 };
 
+const verifyUser = async (req, res) => {
+    const {email} = req.userDetails;
+    const user = await getUserByEmail(email);
+    if (user.isVerified) {
+        res.status(200).json({msg: 'User already verified'});
+    } else {
+        toggleVerification(email, false);
+        res.status(200).json({msg: 'User verified'});
+    }
+}
 
 
 module.exports = {
     login,
     signUp,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    verifyUser
 }

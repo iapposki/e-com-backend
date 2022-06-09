@@ -5,7 +5,7 @@ const cors = require('cors');
 const multer = require('multer')
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
-const {signUp, login, forgotPassword, resetPassword} = require('./controllers/user.controller');
+const {signUp, login, forgotPassword, resetPassword, verifyUser} = require('./controllers/user.controller');
 const {createOTP, validateOtp} = require('./controllers/otp.controller');
 const {createOrder} = require('./controllers/order.controller');
 const {authenticate} = require('./middlewares/auth');
@@ -61,10 +61,10 @@ app.post('/otp', createOTP)
 app.post('/validateotp', validateOtp)
 
 app.post('/auth/signup', signUp)
+app.post('/auth/signup/verify', authenticate, verifyUser)
 app.post('/auth/login', login)
-app.post('/auth/forgotPassword', forgotPassword);
-app.post('/auth/resetPassword', authenticate, resetPassword)
-
+app.post('/auth/forgotpassword', forgotPassword);
+app.post('/auth/resetpassword', authenticate, resetPassword);
 
 app.post('/order', createOrder)
 

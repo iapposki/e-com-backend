@@ -2,9 +2,13 @@ const jwt = require('jsonwebtoken');
 const {authSecret} = require('../config');
 
 const authenticate = async (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    // authHeader will look like : Bearer <token>
-    const token = authHeader && authHeader.split(' ')[1];
+    var {token = ""} = req.query;
+    if (!token) {
+        const authHeader = req.headers['authorization'];
+        // authHeader will look like : Bearer <token>
+        var token = authHeader && authHeader.split(' ')[1];
+    }
+    // console.log(token)
     if (!token) {return res.status(401).json({msg: 'Unauthorized'})}
     try {
         const {name, email, role} = jwt.verify(token, authSecret)
