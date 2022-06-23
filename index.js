@@ -6,7 +6,7 @@ const multer = require('multer')
 const {createSeller, getSellers, deleteSellerById, updateSellerById} = require('./controllers/seller.controller');
 const {createProduct, getProducts, deleteProductById} = require('./controllers/product.controller');
 const {signUp, login, forgotPassword, resetPassword, verifyUser} = require('./controllers/user.controller');
-const {createOTP, validateOtp} = require('./controllers/otp.controller');
+const {createOTP, validateOtp, createOtp, resendOtp} = require('./controllers/otp.controller');
 const {createOrder} = require('./controllers/order.controller');
 const {authenticate} = require('./middlewares/auth');
 const app = express();
@@ -57,8 +57,9 @@ app.post('/seller/:sellerId/product', uploads.array('productImages', 6), createP
 app.get('/products', getProducts);
 app.delete('/product', deleteProductById);
  
-app.post('/otp', createOTP)
+app.post('/otp', createOtp)
 app.post('/validateotp', validateOtp)
+app.post('/resendotp', resendOtp)
 
 app.post('/auth/signup', signUp)
 app.post('/auth/signup/verify', authenticate, verifyUser)
