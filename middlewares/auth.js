@@ -21,6 +21,7 @@ const authenticate = async (req, res, next) => {
         const { name, email, role } = jwt.verify(at, authSecret)
         // console.log(resp)
         req.userDetails = { name, email, role }
+        console.log('ok')
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
@@ -32,7 +33,7 @@ const authenticate = async (req, res, next) => {
                 if (rtRedis !== rt) {
                     throw new Error("Refresh token is invalid")
                 }
-                console.log('ooof')
+                // console.log('ooof')
                 try {
                     req.userDetails = { name, email, role }
                     const rt = await generateToken(name, email, role, expiry = "7d")

@@ -47,8 +47,8 @@ const signUp = async (req, res) => {
     }
     if (condition) {
         try {
-            const tokens = await createUser({ name, email, password, phoneNumber, dob });
             const redisClient = await getRedis()
+            const tokens = await createUser({ name, email, password, phoneNumber, dob });
             await redisClient.SET("rt-" + email, tokens.rt, {
                 EX: 604800
             })
@@ -58,7 +58,7 @@ const signUp = async (req, res) => {
             //         name, email, password, phoneNumber, dob 
             //     }
             // })
-            await sendEmail({
+            sendEmail({
                 to: email,
                 subject: 'Welcome to the e-commerce app',
                 text: `Hi ${name},\n\nWelcome to the e-commerce app.\n\nPlease click on the following link to verify your account:\n\nhttp://localhost:3000/auth/signup/verify?at=${tokens.at}&rt=${tokens.rt}\n\nRegards,\n\nE-commerce team`,

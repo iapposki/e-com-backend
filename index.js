@@ -62,7 +62,7 @@ app.post('/validateotp', validateOtp)
 app.post('/resendotp', resendOtp)
 
 app.post('/auth/signup', signUp)
-app.post('/auth/signup/verify', authenticate, verifyUser)
+app.get('/auth/signup/verify', authenticate, verifyUser)
 app.post('/auth/login', login)
 app.post('/auth/forgotpassword', forgotPassword);
 app.post('/auth/resetpassword', authenticate, resetPassword);
