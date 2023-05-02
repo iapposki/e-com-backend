@@ -49,7 +49,7 @@ app.get('/status', async (req, res) => {
 
 // -------------------------------------------------------
 
-app.post('/seller', authenticate, createSeller);
+app.post('/seller', createSeller);
 app.delete('/seller', deleteSellerById)
 app.get('/seller', getSellers);
 app.put('/seller', updateSellerById);
