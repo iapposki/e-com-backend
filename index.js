@@ -9,9 +9,10 @@ const { signUp, login, forgotPassword, resetPassword, verifyUser } = require('./
 const { validateOtp, createOtp, resendOtp } = require('./controllers/otp.controller');
 const { createOrder } = require('./controllers/order.controller');
 const { authenticate } = require('./middlewares/auth');
-const { PrismaClient } = require('@prisma/client');
+// const { PrismaClient } = require('@prisma/client');
+const {getRedis} = require('./services/redis.service')
 const app = express();
-const port = 3000;
+const port = 5000;
 
 
 // --------------------------------------------------------
@@ -44,6 +45,12 @@ app.get('/status', async (req, res) => {
     // const record = await prisma.user.findMany()
     // console.log(record)
     // console.log('node server is running')
+
+    // const redisClient = await getRedis();
+    // await redisClient.SET("testData", "foo");
+    // var testData = await redisClient.GET("testData");
+    // console.log(testData)
+
     res.send("Node server is running")
 })
 
