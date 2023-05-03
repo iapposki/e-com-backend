@@ -10,7 +10,7 @@ const { validateOtp, createOtp, resendOtp } = require('./controllers/otp.control
 const { createOrder } = require('./controllers/order.controller');
 const { authenticate } = require('./middlewares/auth');
 // const { PrismaClient } = require('@prisma/client');
-const {getRedis} = require('./services/redis.service')
+// const {getRedis} = require('./services/redis.service')
 const app = express();
 const port = 5000;
 
