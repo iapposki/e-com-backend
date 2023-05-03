@@ -27,12 +27,12 @@ This application provides the following endpoints:
 - POST `/resendotp` - resend an OTP
 ### User Authentication
 - POST `/auth/signup` - create a new user
-- GET /auth/signup/verify - verify a user (requires authentication)
-- POST /auth/login - authenticate a user
-- POST /auth/forgotpassword - send a password reset email
-- POST /auth/resetpassword - reset a user's password (requires authentication)
+- GET `/auth/signup/verify` - verify a user (requires authentication)
+- POST `/auth/login` - authenticate a user
+- POST `/auth/forgotpassword` - send a password reset email
+- POST `/auth/resetpassword` - reset a user's password (requires authentication)
 ### Orders
-- POST /order - create a new order
+- POST `/order` - create a new order
 
 ## Middleware
 This application uses `authenticate` which validates JWT token for authentication. The technique used here for secure authentication is access and rotated refresh token.
