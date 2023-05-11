@@ -12,6 +12,13 @@ npx prisma migrate dev
 
 ## Endpoints
 This application provides the following endpoints:
+
+### User Authentication
+- POST `/auth/signup` - create a new user
+- GET `/auth/signup/verify` - verify a user (requires authentication)
+- POST `/auth/login` - authenticate a user
+- POST `/auth/forgotpassword` - send a password reset email
+- POST `/auth/resetpassword` - reset a user's password (requires authentication)
 ### Sellers
 - POST `/seller` - create a new seller
 - DELETE `/seller` - delete a seller
@@ -25,12 +32,6 @@ This application provides the following endpoints:
 - POST `/otp` - create a new OTP
 - POST `/validateotp` - validate an OTP
 - POST `/resendotp` - resend an OTP
-### User Authentication
-- POST `/auth/signup` - create a new user
-- GET `/auth/signup/verify` - verify a user (requires authentication)
-- POST `/auth/login` - authenticate a user
-- POST `/auth/forgotpassword` - send a password reset email
-- POST `/auth/resetpassword` - reset a user's password (requires authentication)
 ### Orders
 - POST `/order` - create a new order
 
