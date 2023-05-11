@@ -15,8 +15,8 @@ const createSeller = async (req, res) => {
         res.status(200).json({msg:'Seller added successfully'});
         console.log("Seller created successfully");
     } catch (err) {
-        logger.error(err.stack)
-        // console.log(err); 
+        // logger.error(err.stack)
+        console.log(err); 
         res.status(400).json({msg:'Error while adding Seller'});
     }
 }

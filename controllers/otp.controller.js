@@ -47,9 +47,9 @@ const createOtp = async (req, res) => {
 const validateOtp = async (req, res) => {
     const {phoneNumber, otp} = req.body;
     const redisClient = await getRedis();
-    const savedOtp = await redisClient.get("otp-" + phoneNumber);
-    console.log(savedOtp, otp)
-    if (otp === savedOtp){
+    const savedOtp = await redisClient.HGETALL("otp-" + phoneNumber);
+    // console.log(savedOtp, otp)
+    if (otp === savedOtp.otp){
         res.status(200).json({success: true});
     } else {
         res.status(200).json({success: false});

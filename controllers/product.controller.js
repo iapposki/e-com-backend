@@ -7,10 +7,12 @@ const createProduct = async (req, res) => {
     console.log("Initializing Product cration...")
     const {sellerId} = req.params;
     imageFileDestinations = [];
-    for (file of req.files) {
-        imageFileDestinations.push(serverAddress + file.destination.split('/').slice(1).join("/") + file.filename);
+    if (req.files){
+        for (file of req.files) {
+            imageFileDestinations.push(serverAddress + file.destination.split('/').slice(1).join("/") + file.filename);
+        }
+        console.log(req.files);
     }
-    console.log(req.files);
     try {
         var { name, price, description, image = [], 
             discountedPrice, isDiscounted, category, inStock

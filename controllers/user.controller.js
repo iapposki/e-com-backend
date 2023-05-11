@@ -61,7 +61,7 @@ const signUp = async (req, res) => {
             sendEmail({
                 to: email,
                 subject: 'Welcome to the e-commerce app',
-                text: `Hi ${name},\n\nWelcome to the e-commerce app.\n\nPlease click on the following link to verify your account:\n\nhttp://localhost:3000/auth/signup/verify?at=${tokens.at}&rt=${tokens.rt}\n\nRegards,\n\nE-commerce team`,
+                text: `Hi ${name},\n\nWelcome to the e-commerce app.\n\nPlease click on the following link to verify your account:\n\nhttp://localhost:5000/auth/signup/verify?at=${tokens.at}&rt=${tokens.rt}\n\nRegards,\n\nE-commerce team`,
                 html: '<h1>Welcome</h1>'
             })
             res.status(201).json({ msg: 'User created successfully', tokens: tokens });
