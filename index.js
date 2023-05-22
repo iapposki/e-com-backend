@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const multer = require('multer')
+const {uploads} = require('./middlewares/multer')
 const { createSeller, getSellers, deleteSellerById, updateSellerById } = require('./controllers/seller.controller');
 const { createProduct, getProducts, deleteProductById } = require('./controllers/product.controller');
 const { signUp, login, forgotPassword, resetPassword, verifyUser } = require('./controllers/user.controller');
@@ -17,22 +17,7 @@ const port = 5000;
 
 // --------------------------------------------------------
 
-// multer
 
-// const uploads = multer({dest: 'public/productImages/'});
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/productImages/')
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1000000000);
-        cb(null, file.originalname + '-' + uniqueSuffix);
-    }
-})
-const uploads = multer({ storage: storage })
-
-// --------------------------------------------------------
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -67,7 +52,7 @@ app.put('/seller', updateSellerById);
 app.post('/seller/:sellerId/product', uploads.array('productImages', 6), createProduct);
 
 app.get('/products', getProducts);
-app.delete('/product', deleteProductById);
+app.delete('/products', deleteProductById);
 
 app.post('/otp', createOtp)
 app.post('/validateotp', validateOtp)
