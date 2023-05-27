@@ -1,10 +1,12 @@
-const { createUser, validateUsernamePassword, getUserByEmail, generateToken, updatePassword, toggleVerification } = require('../services/user.service')
-const logger = require('../log/index');
-const sendEmail = require('../services/email.service');
-const { getRedis } = require('../services/redis.service');
+import { createUser, validateUsernamePassword, getUserByEmail, generateToken, updatePassword, toggleVerification } from "../services/user.service";
+import { logger } from "../log";
+import { sendEmail } from "../services/email.service";
+import { getRedis } from "../services/redis.service";
+import { Request, Response } from "express";
+import { User } from "@prisma/client";
 
 
-const login = async (req, res) => {
+export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     logger.info(req.body)
     // console.log("Initializing user login");
@@ -19,7 +21,7 @@ const login = async (req, res) => {
                 res.status(401).json({ msg: 'Invalid credentials' });
                 logger.info("Invalid credentialsssssssssss");
             }
-        } catch (error) {
+        } catch (error: any) {
             logger.error(error.stack);
             // console.log(error.stack);
             res.status(500).json({ msg: 'Something Failed' });
@@ -27,7 +29,7 @@ const login = async (req, res) => {
     }
 }
 
-const signUp = async (req, res) => {
+export const signUp = async (req: Request, res: Response) => {
 
     const { name, email, password, confirmPassword, phoneNumber, dob } = req.body;
     // console.log("Initializing user creation");
@@ -65,39 +67,41 @@ const signUp = async (req, res) => {
                 html: '<h1>Welcome</h1>'
             })
             res.status(201).json({ msg: 'User created successfully', tokens: tokens });
-        } catch (error) {
+        } catch (error: any) {
             console.log(error.stack);
             res.status(500).json({ msg: 'Something Failed' });
         }
     }
 };
 
-const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req: Request, res: Response) => {
     const { email } = req.body;
 
     try {
         if (!email) {
             res.status(400).json({ msg: 'Email missing' });
         };
-        const user = await getUserByEmail(email);
+        const user: User | null = await getUserByEmail(email);
         if (!user) {
             res.status(404).json({ msg: 'User not found' });
+        } else {
+
+            const token = await generateToken(user.name, user.email, user.role, '10m');
+            await sendEmail({
+                to: email,
+                subject: 'Reset Password',
+                text: `Hi ${user.name},\n\nPlease click on the following link to reset your password:\n\nhttp://localhost:3000/auth/resetpassword?token=${token}\n\nRegards,\n\nE-commerce team`,
+                html: '<h1>Reset Password</h1>'
+            })
+            res.status(200).json({ msg: 'Token generated', token: token });
         };
-        const token = await generateToken(user.name, user.email, user.role, expiry = '10m');
-        await sendEmail({
-            to: email,
-            subject: 'Reset Password',
-            text: `Hi ${user.name},\n\nPlease click on the following link to reset your password:\n\nhttp://localhost:3000/auth/resetpassword?token=${token}\n\nRegards,\n\nE-commerce team`,
-            html: '<h1>Reset Password</h1>'
-        })
-        res.status(200).json({ msg: 'Token generated', token: token });
-    } catch (error) {
+    } catch (error: any) {
         console.log(error.stack);
         res.status(500).json({ msg: 'Something Failed' });
     }
 };
 
-const resetPassword = async (req, res) => {
+export const resetPassword = async (req: Request, res: Response) => {
     const { password, confirmPassword } = req.body;
     const { email } = req.userDetails;
 
@@ -108,16 +112,16 @@ const resetPassword = async (req, res) => {
             await updatePassword(email, password);
             res.status(200).json({ msg: 'Password updated' });
         }
-    } catch (error) {
+    } catch (error: any) {
         console.log(error.stack);
         res.status(500).json({ msg: 'Something Failed' });
     }
 };
 
-const verifyUser = async (req, res) => {
+export const verifyUser = async (req: Request, res: Response) => {
     const { email } = req.userDetails;
-    const user = await getUserByEmail(email);
-    if (user.isVerified) {
+    const user: User | null = await getUserByEmail(email);
+    if (user && user.isVerified) {
         res.status(200).json({ msg: 'User already verified' });
     } else {
         toggleVerification(email, false);
@@ -125,11 +129,3 @@ const verifyUser = async (req, res) => {
     }
 }
 
-
-module.exports = {
-    login,
-    signUp,
-    forgotPassword,
-    resetPassword,
-    verifyUser
-}
