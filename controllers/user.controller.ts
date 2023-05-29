@@ -5,6 +5,13 @@ import { getRedis } from "../services/redis.service";
 import { Request, Response } from "express";
 import { User } from "@prisma/client";
 
+declare global {
+    namespace Express {
+        interface Request {
+            userDetails?: any
+        }
+    }
+}
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
