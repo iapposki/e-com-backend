@@ -13,4 +13,4 @@ EXPOSE 3000
 
 RUN npx prisma generate
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "start-ts" ]
