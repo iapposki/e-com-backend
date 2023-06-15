@@ -1,8 +1,8 @@
 require('dotenv').config()
-import * as express from 'express'
+import express from 'express'
 import { Request, Response, Express } from 'express';
 import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
+import cors from 'cors'
 import { uploads } from './middlewares/multer';
 import { createSeller, getSellers, deleteSellerById, updateSellerById } from './controllers/seller.controller';
 import { createProduct, getProducts, deleteProductById } from './controllers/product.controller';
@@ -14,7 +14,6 @@ import { authenticate } from './middlewares/auth';
 
 const app: Express = express();
 const port: number = 5000;
-
 
 // --------------------------------------------------------
 
@@ -68,8 +67,10 @@ app.post('/auth/resetpassword', authenticate, resetPassword);
 app.post('/order', createOrder)
 
 // -----------------------------------------------------
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    })
+}
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-})
-
+export default app;
