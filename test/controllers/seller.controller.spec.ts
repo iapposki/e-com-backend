@@ -20,6 +20,24 @@ describe("Seller controller", () => {
         }
         chai.request(app).post('/seller').send(testSeller).end((err, res) => {
             assert.equal(res.status, 200)
+            assert.equal(res.body.msg, "Seller added successfully")
+            // console.log(res.body)
+        })
+    })
+    it("should get all sellers", async () => {
+        chai.request(app).get('/seller').end((err, res) => {
+            assert.equal(res.status, 200)
+            assert.equal(res.body.msg, "Success")
+            assert.typeOf(res.body.data, 'Array')
+        })
+    })
+    it("should delete seller", async () => {
+        var data = {
+            "email": "testseller@gmail.com"
+        }
+        chai.request(app).delete('/seller').send(data).end((err, res) => {
+            assert.equal(res.status, 200)
+            // console.log(res.body)
         })
     })
 })

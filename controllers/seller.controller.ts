@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { Seller } from "@prisma/client";
 
 export const createSeller = async (req: Request, res: Response) => {
-    console.log("Initializing Seller cration...")
+    // console.log("Initializing Seller cration...")
     try {
         const { name, email, gstNumber, phoneNumber } = req.body;
         await prisma.seller.create({
@@ -35,14 +35,26 @@ export const getSellers = async (req: Request, res: Response) => {
 
 export const deleteSellerById = async (req: Request, res: Response) => {
     try {
-        const { id } = req.body;
-        await prisma.seller.delete({
-            where: {
-                id: id
-            }
-        });
+        const { id, email } = req.body;
+        if (id) {
+            await prisma.seller.delete({
+                where: {
+                    id: id
+                }
+            });
+        } else {
+            await prisma.seller.delete({
+                where: {
+                    email: email
+                }
+            })
+        }
         // console.log(id);
-        res.status(200).json({ msg: 'Successfully deleted seller with id ' + id });
+        if (id) {
+            res.status(200).json({ msg: 'Successfully deleted seller with id ' + id });
+        } else {
+            res.status(200).json({ msg: "Successfully deleted seller with email : " + email })
+        }
     } catch (err) {
         // console.log(err)
         res.status(400).json({ msg: 'Error while deleting seller' });
