@@ -17,6 +17,9 @@ services:
       - '5432:5432'
     volumes:
       - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0000
   redis:
     image: 'redis:latest'
     restart: always
