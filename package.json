@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./node_modules/.bin/nodemon index.js",
     "start-ts": "npx ts-node ./index.ts",
-    "test": "npx mocha -r ts-node/register './test/**/*.ts'"
+    "test": "npx mocha -r ts-node/register './test/*.ts'"
   },
   "author": "",
   "license": "ISC",
