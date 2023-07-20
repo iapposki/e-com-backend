@@ -3,9 +3,9 @@ import chai from "chai";
 // const chaiHttp = require('chai-http')
 // const {createSeller, getSellers, deleteSellerById, updateSellerById} = require("../../controllers/seller")
 import chaiHttp from "chai-http";
-import { createSeller, getSellers, deleteSellerById, updateSellerById } from '../../controllers/seller.controller'
+import { createSeller, getSellers, deleteSellerById, updateSellerById } from '../controllers/seller.controller'
 import 'mocha';
-import app from '../../index'
+import app from '../index'
 
 const assert = chai.assert
 chai.use(chaiHttp)
