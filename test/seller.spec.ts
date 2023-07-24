@@ -10,7 +10,7 @@ import app from '../index'
 const assert = chai.assert
 chai.use(chaiHttp)
 
-describe("Seller controller", () => {
+describe("Seller api tests", () => {
     it("should create seller", (done) => {
         let testSeller = {
             "name": "testseller",
