@@ -1,19 +1,19 @@
 require('dotenv').config()
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const {uploads} = require('./middlewares/multer')
-const { createSeller, getSellers, deleteSellerById, updateSellerById } = require('./controllers/seller.controller');
-const { createProduct, getProducts, deleteProductById } = require('./controllers/product.controller');
-const { signUp, login, forgotPassword, resetPassword, verifyUser } = require('./controllers/user.controller');
-const { validateOtp, createOtp, resendOtp } = require('./controllers/otp.controller');
-const { createOrder } = require('./controllers/order.controller');
-const { authenticate } = require('./middlewares/auth');
-// const { PrismaClient } = require('@prisma/client');
-// const {getRedis} = require('./services/redis.service')
-const app = express();
-const port = 5000;
+import express from 'express'
+import { Request, Response, Express } from 'express';
+import * as bodyParser from 'body-parser';
+import cors from 'cors'
+import { uploads } from './middlewares/multer';
+import { createSeller, getSellers, deleteSellerById, updateSellerById } from './controllers/seller.controller';
+import { createProduct, getProducts, deleteProductById } from './controllers/product.controller';
+import { signUp, login, forgotPassword, resetPassword, verifyUser } from './controllers/user.controller';
+import { validateOtp, createOtp, resendOtp } from './controllers/otp.controller';
+import { createOrder } from './controllers/order.controller';
+import { authenticate } from './middlewares/auth';
 
+
+const app: Express = express();
+const port: number = 5000;
 
 // --------------------------------------------------------
 
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(cors());
 
-app.get('/status', async (req, res) => {
+app.get('/status', async (req: Request, res: Response) => {
     // res.status(200).json({msg:'GET request received'});
     // const prisma = new PrismaClient()
     // const record = await prisma.user.findMany()
@@ -67,8 +67,10 @@ app.post('/auth/resetpassword', authenticate, resetPassword);
 app.post('/order', createOrder)
 
 // -----------------------------------------------------
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    })
+}
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-})
-
+export default app;
