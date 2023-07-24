@@ -1,4 +1,5 @@
 import chai from "chai";
+
 import chaiHttp from "chai-http";
 import 'mocha';
 import app from '../index'
@@ -6,7 +7,7 @@ import app from '../index'
 const assert = chai.assert
 chai.use(chaiHttp)
 
-describe("Seller controller", () => {
+describe("User and auth api tests", () => {
     it("should create seller", (done) => {
         let testSeller = {
             "name": "testseller",
