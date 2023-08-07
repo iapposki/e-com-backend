@@ -1,5 +1,5 @@
 # E-Commerce Backend
-This is a backend application for an e-commerce website built using Node.js, Express, Prisma and PSQL. It provides endpoints for managing sellers, products, orders, user/seller creation and authentication, otp verification etc. Use of access and rotated refresh token is one of the main feature of the project.
+This is a backend application for an e-commerce website built using Node.js, Express, Prisma and PSQL. It provides endpoints for managing sellers, products, orders, user/seller creation and authentication, otp verification, pagination etc. Use of access and rotated refresh token is one of the main feature of the project.
 ## Getting Started
 To get started with this project, you'll need to clone the repository to your local machine and have docker installed. Setup up the container stack using the following command : 
 ```
