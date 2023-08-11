@@ -14,6 +14,4 @@ export const getRedis = async () => {
     return redisClient;
 }
 
-// await client.set('key', 'value');
-// const value = await client.get('key');
 
