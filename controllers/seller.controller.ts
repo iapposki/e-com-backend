@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import { Seller } from "@prisma/client";
 
 export const createSeller = async (req: Request, res: Response) => {
-    // console.log("Initializing Seller cration...")
     try {
         const { name, email, gstNumber, phoneNumber } = req.body;
         await prisma.seller.create({
@@ -13,7 +12,6 @@ export const createSeller = async (req: Request, res: Response) => {
                 name, email, gstNumber, phoneNumber
             }
         });
-        // res.send("Seller created successfully");
         res.status(200).json({ msg: 'Seller added successfully' });
         console.log("Seller created successfully");
     } catch (err) {
@@ -28,7 +26,6 @@ export const getSellers = async (req: Request, res: Response) => {
         const response: Array<Seller> = await prisma.seller.findMany({})
         res.status(200).json({ msg: 'Success', data: response });
     } catch (err) {
-        // console.log(err)
         res.status(400).json({ msg: 'Error while fetching sellers' });
     }
 }
@@ -49,14 +46,12 @@ export const deleteSellerById = async (req: Request, res: Response) => {
                 }
             })
         }
-        // console.log(id);
         if (id) {
             res.status(200).json({ msg: 'Successfully deleted seller with id ' + id });
         } else {
             res.status(200).json({ msg: "Successfully deleted seller with email : " + email })
         }
     } catch (err) {
-        // console.log(err)
         res.status(400).json({ msg: 'Error while deleting seller' });
     }
 }
@@ -74,9 +69,7 @@ export const updateSellerById = async (req: Request, res: Response) => {
         });
         res.status(200).json({ msg: 'Successfully updated seller with id ' + id });
     } catch (err) {
-        // console.log(err)
         res.status(400).json({ msg: 'Error while updating seller' });
     }
-
 }
 
