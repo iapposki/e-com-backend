@@ -16,7 +16,6 @@ declare global {
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     logger.info(req.body)
-    // console.log("Initializing user login");
     if (!(email && password)) {
         res.status(400).json({ msg: 'Email or password missing' });
     } else {
@@ -30,20 +29,14 @@ export const login = async (req: Request, res: Response) => {
             }
         } catch (error: any) {
             logger.error(error.stack);
-            // console.log(error.stack);
             res.status(500).json({ msg: 'Something Failed' });
         }
     }
 }
 
 export const signUp = async (req: Request, res: Response) => {
-
     const { name, email, password, confirmPassword, phoneNumber, dob } = req.body;
-    // console.log("Initializing user creation");
-
     var condition = true;
-
-    // Check if all fields are present
     if (!(name && email && password && phoneNumber && confirmPassword)) {
         res.status(400).json({ msg: 'Insufficient information' });
         condition = false;
@@ -61,12 +54,6 @@ export const signUp = async (req: Request, res: Response) => {
             await redisClient.SET("rt-" + email, tokens.rt, {
                 EX: 604800
             })
-
-            // await prisma.user.create({
-            //     data: {
-            //         name, email, password, phoneNumber, dob 
-            //     }
-            // })
             sendEmail({
                 to: email,
                 subject: 'Welcome to the e-commerce app',
