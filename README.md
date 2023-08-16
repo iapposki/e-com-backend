@@ -33,7 +33,7 @@ This application provides the following endpoints:
 - POST `/validateotp` - validate an OTP
 - POST `/resendotp` - resend an OTP
 ### Orders
-- POST `/order` - create a new order
+- POST `/order` - create a new order 
 
 ## Middleware
 This application uses `authenticate` which validates JWT token for authentication. The technique used here for secure authentication is access and rotated refresh token.
