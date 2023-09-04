@@ -32,7 +32,7 @@ This application provides the following endpoints:
 - POST `/otp` - create a new OTP
 - POST `/validateotp` - validate an OTP
 - POST `/resendotp` - resend an OTP
-### Orders
+### Orders 
 - POST `/order` - create a new order 
 
 ## Middleware
